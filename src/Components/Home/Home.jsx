@@ -1,4 +1,5 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect } from 'react';
 import Chart from '../Chart/Chart';
 import ItemLists from '../ItemLists/ItemLists';
 import Navbar from '../Navbar/Navbar';
@@ -8,7 +9,14 @@ import TableList from '../TableList/TableList';
 import './Home.scss';
 
 function Home() {
-    //
+    const getUser = () => {
+        axios.get('http://localhost:3500/api/v1/admin/info/user/all').then((response) => {
+            console.log(response.json());
+        });
+    };
+    useEffect(() => {
+        getUser();
+    }, []);
     return (
         <div className="home">
             <Sidebar />

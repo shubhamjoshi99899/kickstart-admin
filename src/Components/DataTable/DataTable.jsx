@@ -11,29 +11,19 @@ import './datatable.scss';
 function DataTable() {
     const [data, setData] = useState([]);
     const location = useLocation();
-    const path = location.pathname.split('/')[1];
 
     useEffect(() => {
         const dataCall = async () => {
-            const res = await axios.get(`https://rooms-backend.onrender.com/api/${path}`);
-            setData(res.data.message.slice(1));
+            const res = await axios.get(`http://localhost:3500/api/v1/admin/info/user/all`);
+            setData(res.data.result);
         };
         dataCall();
-    }, [path, data]);
-
-    const handleDlt = async (id) => {
-        try {
-            axios.delete(`https://rooms-backend.onrender.com/api/${path}/${id}`);
-            setData(data.filter((item) => item.id !== id));
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    }, [data]);
 
     const columns = [
         {
-            field: 'id',
-            headerName: 'ID',
+            field: 'userID',
+            headerName: 'USER ID',
             width: 310,
             renderCell: (param) => (
                 <div className="userr">
@@ -42,36 +32,29 @@ function DataTable() {
                         alt="User"
                         className="userr_image"
                     />
-                    {param.row._id}
+                    {param?.row.userID}
                 </div>
             ),
         },
         {
-            field: 'username',
-            headerName: 'Username',
+            field: 'phoneNumber',
+            headerName: 'Phone Number',
             width: 160,
         },
-        { field: 'email', headerName: 'Email', width: 270 },
-        { field: 'phone', headerName: 'Phone', width: 150 },
-        { field: 'country', headerName: 'Country', width: 150 },
+        { field: `firstName`, headerName: 'Name', width: 170 },
+
+        { field: 'mailID', headerName: 'Email', width: 170 },
         {
             field: 'action',
             headerName: 'Action',
             width: 170,
             renderCell: (params) => (
                 <div className="actionn">
-                    <Link to={params.row._id}>
+                    <Link to={params?.row._id}>
                         <button type="button" className="view_btn">
                             View
                         </button>
                     </Link>
-                    <button
-                        type="button"
-                        className="delete_btn"
-                        onClick={() => handleDlt(params.row._id)}
-                    >
-                        Delete
-                    </button>
                 </div>
             ),
         },
@@ -86,7 +69,7 @@ function DataTable() {
                 pageSize={10}
                 rowsPerPageOptions={[10]}
                 checkboxSelection
-                getRowId={(row) => row._id}
+                getRowId={(row) => row.userID}
             />
         </div>
     );

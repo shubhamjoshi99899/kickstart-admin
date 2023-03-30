@@ -7,7 +7,7 @@ import { Contexts } from '../../ContextUser/Contexts';
 import './Login.scss';
 
 const index = () => {
-    const [email, setEmail] = useState('');
+    const [admin, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [err, setErr] = useState(false);
     const nevigate = useNavigate();
@@ -16,20 +16,23 @@ const index = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const inpVal = {
-            email,
+            admin,
             password,
         };
         dispatch({ type: 'LOGIN_START' });
 
         try {
             const res = await axios.post(
-                'https://rooms-backend.onrender.com/api/user/login',
+                'http://localhost:3500/api/v1/admin/suman-kickstart',
                 inpVal
             );
+            console.log(res);
 
-            if (res.data.message.isadmin) {
-                dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.message.details });
+            if (res.data.success === true) {
+                dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.token });
                 nevigate('/');
+                res.cookie('token', res.data.token);
+                document.cookie = res.data.token;
             } else {
                 dispatch({ type: 'LOGIN_FAILURE' });
                 setErr(true);
@@ -47,9 +50,8 @@ const index = () => {
                     <h3>Admin LogIn</h3>
                     <form action="" onSubmit={handleSubmit} className="form">
                         <input
-                            type="email"
                             placeholder="Enter email"
-                            value={email}
+                            value={admin}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />

@@ -6,7 +6,7 @@ import Reducer from './Reducer';
 const isServer = typeof window !== 'undefined';
 
 const initial_state = {
-    user: isServer && JSON.parse(localStorage.getItem('user') || null),
+    token: JSON.parse(localStorage.getItem('token') || null),
     loading: false,
     error: false,
 };
@@ -17,8 +17,8 @@ export function UserContext({ children }) {
     const [state, dispatch] = useReducer(Reducer, initial_state);
 
     useEffect(() => {
-        localStorage.setItem('user', JSON.stringify(state.user));
-    }, [state.user]);
+        localStorage.setItem('token', JSON.stringify(state.token));
+    }, [state.token]);
 
     return (
         <Contexts.Provider

@@ -37,7 +37,7 @@ function Lists({ type }) {
 
                     {type === 'user' ? (
                         <DataTable />
-                    ) : type === 'product' ? (
+                    ) : type === 'bookings' ? (
                         <TableList />
                     ) : (
                         <DataTable />

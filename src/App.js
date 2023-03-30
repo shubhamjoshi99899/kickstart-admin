@@ -28,44 +28,6 @@ const userInpDetails = [
         pattern: '^[A-Za-z0-9]{3,12}$',
         errorMsg: 'Username should be 3-12 characters & should not include any special character!',
     },
-    {
-        id: 3,
-        name: 'fullname',
-        lable: 'Fullname',
-        type: 'text',
-        placeholder: 'John Smith',
-        required: true,
-        errorMsg: 'Name is required!',
-    },
-    {
-        id: 4,
-        name: 'email',
-        lable: 'Email',
-        type: 'email',
-        placeholder: 'example@email.com',
-        required: true,
-        errorMsg: 'Enter a valid email!',
-    },
-    {
-        id: 5,
-        name: 'password',
-        lable: 'Password',
-        type: 'password',
-        placeholder: 'Password',
-        required: true,
-        pattern: '^(?=.*[0-9])(?=.*[A-Za-z])(?=.*[!@#$%^&*()_+])[A-Za-z0-9!@#$%^&*()_+]{6,20}$',
-        errorMsg:
-            'Password should be 6-20 characters and include at last 1 num, 1 letter, 1 special character!',
-    },
-    {
-        id: 6,
-        name: 'country',
-        lable: 'Address',
-        type: 'text',
-        placeholder: 'Address',
-        required: true,
-        errorMsg: 'Address is required!',
-    },
 ];
 const productInpDetails = [
     {
@@ -76,42 +38,6 @@ const productInpDetails = [
         placeholder: 'Product title',
         required: true,
         errorMsg: 'Title is required!',
-    },
-    {
-        id: 3,
-        name: 'description',
-        lable: 'Description',
-        type: 'text',
-        placeholder: 'Product description',
-        required: true,
-        errorMsg: 'Description is required!',
-    },
-    {
-        id: 4,
-        name: 'category',
-        lable: 'Category',
-        type: 'text',
-        placeholder: 'Product category',
-        required: true,
-        errorMsg: 'Category is required!',
-    },
-    {
-        id: 5,
-        name: 'price',
-        lable: 'Price',
-        type: 'number',
-        placeholder: 'Product price',
-        required: true,
-        errorMsg: 'Price is required!',
-    },
-    {
-        id: 6,
-        name: 'stock',
-        lable: 'In Stock',
-        type: 'text',
-        placeholder: 'In Stock',
-        required: true,
-        errorMsg: 'This field is required!',
     },
 ];
 const blogInpDetails = [
@@ -124,93 +50,8 @@ const blogInpDetails = [
         required: true,
         errorMsg: 'Title is required!',
     },
-    {
-        id: 2,
-        name: 'desc',
-        lable: 'Description',
-        type: 'text',
-        placeholder: 'Blog description',
-        required: true,
-        errorMsg: 'Description is required!',
-    },
-    {
-        id: 3,
-        name: 'tags',
-        lable: 'Tags',
-        type: 'text',
-        placeholder: 'Travel, Tourist, Communication',
-        required: true,
-        errorMsg: 'Tag is required!',
-    },
 ];
 const hotelInpDetails = [
-    {
-        id: 6,
-        name: 'name',
-        lable: 'Name',
-        type: 'text',
-        placeholder: 'Hotel Name',
-        required: true,
-        errorMsg: 'Name is required!',
-    },
-    {
-        id: 7,
-        name: 'type',
-        lable: 'Type',
-        type: 'text',
-        placeholder: 'Hotel, Resort',
-        required: true,
-        errorMsg: 'Type is required!',
-    },
-    {
-        id: 8,
-        name: 'city',
-        lable: 'City',
-        type: 'text',
-        placeholder: 'City',
-        required: true,
-        errorMsg: 'City is required!',
-    },
-    {
-        id: 1,
-        name: 'title',
-        lable: 'Title',
-        type: 'text',
-        placeholder: 'Hotel title',
-        required: true,
-        errorMsg: 'Title is required!',
-    },
-    {
-        id: 2,
-        name: 'desc',
-        lable: 'Description',
-        type: 'text',
-        placeholder: 'Hotel description',
-        required: true,
-        errorMsg: 'Description is required!',
-    },
-    {
-        id: 3,
-        name: 'price',
-        lable: 'Price',
-        type: 'number',
-        placeholder: 'Hotel price',
-        min: 10,
-        max: 1000,
-        required: true,
-        errorMsg: 'Price should be between $ 10-1000!',
-    },
-    {
-        id: 4,
-        name: 'rooms',
-        lable: 'Room',
-        type: 'number',
-        min: 1,
-        max: 10,
-        placeholder: 'Total rooms',
-        required: true,
-        errorMsg: 'Room should be between 1-10!',
-    },
     {
         id: 5,
         name: 'rating',
@@ -224,35 +65,6 @@ const hotelInpDetails = [
     },
 ];
 const roomInpDetails = [
-    {
-        id: 1,
-        name: 'title',
-        lable: 'Title',
-        type: 'text',
-        placeholder: 'Hotel title',
-        required: true,
-        errorMsg: 'Title is required!',
-    },
-    {
-        id: 2,
-        name: 'desc',
-        lable: 'Description',
-        type: 'text',
-        placeholder: 'Hotel description',
-        required: true,
-        errorMsg: 'Description is required!',
-    },
-    {
-        id: 3,
-        name: 'price',
-        lable: 'Price',
-        type: 'number',
-        placeholder: 'Hotel price',
-        min: 10,
-        max: 1000,
-        required: true,
-        errorMsg: 'Price should be between $ 10-1000!',
-    },
     {
         id: 4,
         name: 'maxPeople',
@@ -273,8 +85,8 @@ function App() {
 
     // create protected route
     function ProtectedRoute({ children }) {
-        const { user } = useContext(Contexts);
-        if (!user) {
+        const { token } = useContext(Contexts);
+        if (!token) {
             return <Navigate to="/login" />;
         }
 
@@ -286,13 +98,14 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/">
-                        <Route path="login" element={<Login />} />
+                        <Route path="/login" element={<Login />} />
                         <Route
                             index
+                            path="/"
                             element={
-                                <ProtectedRoute>
-                                    <Home />
-                                </ProtectedRoute>
+                                // <ProtectedRoute>
+                                <Home />
+                                // </ProtectedRoute>
                             }
                         />
                         {/* nested users routes */}
@@ -300,29 +113,29 @@ function App() {
                             <Route
                                 index
                                 element={
-                                    <ProtectedRoute>
-                                        <Lists type="user" />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <Lists type="user" />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path=":userId"
                                 element={
-                                    <ProtectedRoute>
-                                        <Detail />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <Detail />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path="addnew"
                                 element={
-                                    <ProtectedRoute>
-                                        <AddNew
-                                            inputs={userInpDetails}
-                                            title="Add New User"
-                                            type="USER"
-                                        />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <AddNew
+                                        inputs={userInpDetails}
+                                        title="Add New User"
+                                        type="USER"
+                                    />
+                                    // </ProtectedRoute>
                                 }
                             />
                         </Route>
@@ -332,29 +145,29 @@ function App() {
                             <Route
                                 index
                                 element={
-                                    <ProtectedRoute>
-                                        <Hotels type="room" />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <Hotels type="room" />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path=":hotelId"
                                 element={
-                                    <ProtectedRoute>
-                                        <BlogDetail />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <BlogDetail />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path="addnew"
                                 element={
-                                    <ProtectedRoute>
-                                        <AddHotel
-                                            inputs={hotelInpDetails}
-                                            title="Add New Hotel"
-                                            type="HOTEL"
-                                        />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <AddHotel
+                                        inputs={hotelInpDetails}
+                                        title="Add New Hotel"
+                                        type="HOTEL"
+                                    />
+                                    // </ProtectedRoute>
                                 }
                             />
                         </Route>
@@ -364,29 +177,29 @@ function App() {
                             <Route
                                 index
                                 element={
-                                    <ProtectedRoute>
-                                        <Rooms type="room" />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <Rooms type="room" />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path=":roomId"
                                 element={
-                                    <ProtectedRoute>
-                                        <BlogDetail />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <BlogDetail />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path="addnew"
                                 element={
-                                    <ProtectedRoute>
-                                        <AddRoom
-                                            inputs={roomInpDetails}
-                                            title="Add New Room"
-                                            type="ROOM"
-                                        />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <AddRoom
+                                        inputs={roomInpDetails}
+                                        title="Add New Room"
+                                        type="ROOM"
+                                    />
+                                    // </ProtectedRoute>
                                 }
                             />
                         </Route>
@@ -396,29 +209,29 @@ function App() {
                             <Route
                                 index
                                 element={
-                                    <ProtectedRoute>
-                                        <Blogs type="blog" />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <Blogs type="blog" />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path=":blogId"
                                 element={
-                                    <ProtectedRoute>
-                                        <BlogDetail />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <BlogDetail />
+                                    // </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path="addnew"
                                 element={
-                                    <ProtectedRoute>
-                                        <AddNew
-                                            inputs={blogInpDetails}
-                                            title="Create New Blog"
-                                            type="BLOG"
-                                        />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <AddNew
+                                        inputs={blogInpDetails}
+                                        title="Create New Blog"
+                                        type="BLOG"
+                                    />
+                                    // </ProtectedRoute>
                                 }
                             />
                         </Route>
@@ -428,9 +241,9 @@ function App() {
                             <Route
                                 index
                                 element={
-                                    <ProtectedRoute>
-                                        <Lists type="product" />
-                                    </ProtectedRoute>
+                                    // <ProtectedRoute>
+                                    <Lists type="bookings" />
+                                    // </ProtectedRoute>
                                 }
                             />
                         </Route>

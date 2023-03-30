@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './tableList.scss';
 
 // mui table
@@ -12,11 +12,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 // import dummy image
+import axios from 'axios';
 import book1 from '../../Images/book1.jpg';
-import book2 from '../../Images/book2.jpg';
-import book3 from '../../Images/book3.jpg';
-import book4 from '../../Images/book4.jpg';
-import book5 from '../../Images/book5.jpg';
+import { handleGetFullDateWithTime } from '../../utils/dataModifier';
 
 function TableList() {
     // Replace this data with your own
@@ -31,57 +29,19 @@ function TableList() {
             method: 'Online Payment',
             status: 'Approved',
         },
-        {
-            _id: 235343343,
-            product: 'Room 2',
-            image: book2,
-            customer: 'Julia Ani',
-            date: '23 April, 2022',
-            ammount: 55,
-            method: 'Cash On Delivery',
-            status: 'Pending',
-        },
-        {
-            _id: 234239873,
-            product: 'Room 3',
-            image: book3,
-            customer: 'John Smith',
-            date: '10 October, 2022',
-            ammount: 25,
-            method: 'Online Payment',
-            status: 'Approved',
-        },
-        {
-            _id: 23423143,
-            product: 'Room 4',
-            image: book4,
-            customer: 'Devid John',
-            date: '3 March, 2022',
-            ammount: 40,
-            method: 'Cash On Delivery',
-            status: 'Approved',
-        },
-        {
-            _id: 123423343,
-            product: 'Room 5',
-            image: book5,
-            customer: 'Humlar',
-            date: '20 November, 2022',
-            ammount: 45,
-            method: 'Online Payment',
-            status: 'Approved',
-        },
-        {
-            _id: 2333343,
-            product: 'Room 6',
-            image: book2,
-            customer: 'Devid John',
-            date: '12 June, 2022',
-            ammount: 28,
-            method: 'Cash On Delivery',
-            status: 'Pending',
-        },
     ];
+
+    const [currentbookings, setCurrentBooking] = useState([]);
+
+    useEffect(() => {
+        const datass = async () => {
+            const curRes = await axios.get(
+                'http://localhost:3500/api/v1/admin/info/current/reservation'
+            );
+            setCurrentBooking(curRes.data.response);
+        };
+        datass();
+    }, []);
 
     return (
         <TableContainer component={Paper} className="table_list">
@@ -91,28 +51,32 @@ function TableList() {
                         <TableCell className="table_cell">Booking Id</TableCell>
                         <TableCell className="table_cell">Booked Space</TableCell>
                         <TableCell className="table_cell">Customer</TableCell>
-                        <TableCell className="table_cell">Ammount</TableCell>
-                        <TableCell className="table_cell">Date</TableCell>
+                        <TableCell className="table_cell">Booking Time</TableCell>
+                        <TableCell className="table_cell">Reservation Time</TableCell>
                         <TableCell className="table_cell">Payment Status</TableCell>
                         <TableCell className="table_cell">Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row) => (
-                        <TableRow key={row._id}>
+                    {currentbookings.map((row) => (
+                        <TableRow key={row?._id}>
                             <TableCell component="th" scope="row" className="table_cell">
                                 <div className="product_idd">
-                                    <img src={row.image} alt="product" className="product_img" />
-                                    {row._id}
+                                    {/* <img src={row?.image} alt="product" className="product_img" /> */}
+                                    {row?.transactionNumber}
                                 </div>
                             </TableCell>
-                            <TableCell className="table_cell">{row.product}</TableCell>
-                            <TableCell className="table_cell">{row.customer}</TableCell>
-                            <TableCell className="table_cell">{row.ammount}</TableCell>
-                            <TableCell className="table_cell">{row.date}</TableCell>
-                            <TableCell className="table_cell">{row.method}</TableCell>
+                            <TableCell className="table_cell">{row?.seatID}</TableCell>
+                            <TableCell className="table_cell">{row?.userID}</TableCell>
                             <TableCell className="table_cell">
-                                <span className={`status ${row.status}`}>{row.status}</span>
+                                {handleGetFullDateWithTime(row?.reservationDate)}
+                            </TableCell>
+                            <TableCell className="table_cell">
+                                {handleGetFullDateWithTime(row?.bookingTime)}
+                            </TableCell>
+                            <TableCell className="table_cell">Paid</TableCell>
+                            <TableCell className="table_cell">
+                                <span className={`status ${row?.status}`}>Booked</span>
                             </TableCell>
                         </TableRow>
                     ))}

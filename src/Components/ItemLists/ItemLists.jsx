@@ -11,18 +11,23 @@ import './itemlists.scss';
 
 function ItemLists({ type }) {
     // store the data
+    const [currentBooking, setCurrentBooking] = useState([]);
+    const [oldBookings, setOldBookings] = useState([]);
     const [userData, setUserData] = useState([]);
-    const [hotelData, setHotelData] = useState([]);
-    const [blogData, setBlogData] = useState([]);
 
     useEffect(() => {
         const datass = async () => {
-            const res = await axios.get('https://rooms-backend.onrender.com/api/hotels');
-            const res2 = await axios.get('https://rooms-backend.onrender.com/api/blogs');
-            const res3 = await axios.get('https://rooms-backend.onrender.com/api/users');
-            setHotelData(res.data.message);
-            setBlogData(res2.data.message);
-            setUserData(res3.data.message);
+            const curRes = await axios.get(
+                'http://localhost:3500/api/v1/admin/info/current/reservation'
+            );
+            console.log(curRes);
+            const oldRes = await axios.get(
+                'http://localhost:3500/api/v1/admin/info/old/reservation'
+            );
+            const allusers = await axios.get('http://localhost:3500/api/v1/admin/info/user/all');
+            setCurrentBooking(curRes.data.response);
+            setOldBookings(oldRes.data.response);
+            setUserData(allusers.data.result);
         };
         datass();
     }, []);
@@ -53,7 +58,7 @@ function ItemLists({ type }) {
             data = {
                 title: 'SPACES',
                 isMoney: false,
-                count: <CountUp end={hotelData.length} duration={1} />,
+                count: <CountUp end={5} duration={1} />,
 
                 icon: (
                     <LocalGroceryStoreOutlinedIcon
@@ -70,8 +75,8 @@ function ItemLists({ type }) {
             break;
         case 'earning':
             data = {
-                title: 'BOOKINGS',
-                count: <CountUp end={blogData.length} duration={1} />,
+                title: 'CURRENT BOOKINGS',
+                count: <CountUp end={currentBooking?.length} duration={1} />,
                 icon: (
                     <AttachMoneyOutlinedIcon
                         style={{
@@ -87,9 +92,9 @@ function ItemLists({ type }) {
             break;
         case 'balance':
             data = {
-                title: 'BALANCE',
-                count: <CountUp end={520} duration={1} />,
-                isMoney: true,
+                title: 'OLD Bookings',
+                count: <CountUp end={oldBookings?.length} duration={1} />,
+                isMoney: false,
                 icon: (
                     <PaidOutlinedIcon
                         style={{
